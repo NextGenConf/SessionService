@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
 	"github.com/NextGenConf/SessionService/handlers"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 func main() {
