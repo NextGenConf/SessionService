@@ -1,7 +1,7 @@
 package models
 
 type Session struct {
-	UniqueName   string
+	UniqueName   string `bson:"_id"`
 	Title        string
 	Subtitle     string
 	Description  string
