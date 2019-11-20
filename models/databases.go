@@ -12,8 +12,9 @@ import (
 
 /// Interface to interact with a session database.
 type SessionDatabaseHandler interface {
-	GetAllSessions() []Session
-	GetSession(string) Session
+	GetAllSessions() ([]Session, error)
+	GetSession(string) (Session, error)
+	AddSession(Session) error
 }
 
 const (
@@ -34,6 +35,7 @@ func InitializeDatabaseHandler() SessionDatabaseHandler {
 	handler := &MongoDbHandler{
 		Collection: client.Database(MongoDb).Collection(MongoCollection),
 	}
+
 	return handler
 }
 
@@ -43,22 +45,53 @@ type MongoDbHandler struct {
 }
 
 /// Retrieves all sessions from the database
-func (mongo *MongoDbHandler) GetAllSessions() []Session {
-	var sessions []Session
-	cursor, err := mongo.Collection.Find(context.Background(), bson.M{})
+func (mongo *MongoDbHandler) GetAllSessions() ([]Session, error) {
+	cursor, err := mongo.Collection.Find(context.Background(), bson.D{})
 	if err != nil {
 		log.Printf("Failed to read from db: %s", err.Error())
-		return make([]Session, 10)
+		return nil, err
 	}
 
-	cursor.All(context.Background(), sessions)
-	return sessions
+	var results []Session
+	for cursor.Next(context.Background()) {
+		var session Session
+		err = cursor.Decode(&session)
+		if err != nil {
+			log.Printf("Failed to decode session: %s", err.Error())
+			return nil, err
+		}
+
+		results = append(results, session)
+	}
+
+	return results, nil
 }
 
 /// Retrieve a session by the specific name
-func (mongo *MongoDbHandler) GetSession(uniqueName string) Session {
+func (mongo *MongoDbHandler) GetSession(uniqueName string) (Session, error) {
 	var filter = bson.M{"UniqueName": uniqueName}
 	var session Session
-	mongo.Collection.FindOne(context.Background(), filter).Decode(session)
-	return session
+	err := mongo.Collection.FindOne(context.Background(), filter).Decode(session)
+	if err != nil {
+		log.Printf("Failed to read session from db: %s", err.Error())
+	}
+
+	return session, nil
+}
+
+/// Adds a session to the database
+func (mongo *MongoDbHandler) AddSession(session Session) error {
+	data, err := bson.Marshal(session)
+	if err != nil {
+		log.Printf("Failed to serialize json: %s", err.Error())
+		return err
+	}
+
+	_, err = mongo.Collection.InsertOne(context.Background(), data)
+	if err != nil {
+		log.Printf("Failed to insert new session: %s", err.Error())
+		return err
+	}
+
+	return nil
 }
