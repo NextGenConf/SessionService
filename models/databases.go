@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,16 +19,16 @@ type SessionDatabaseHandler interface {
 }
 
 const (
-	MongoDbHost     = "mongodb://localhost:27018"
-	MongoCollection = "Sessions"
-	MongoDb         = "SessionsDb"
+	MongoDbHostEnvVar = "MONGO_DB_HOST"
+	MongoCollection   = "Sessions"
+	MongoDb           = "SessionsDb"
 )
 
 /// Initializes the database to interact with the session database
 func InitializeDatabaseHandler() SessionDatabaseHandler {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(MongoDbHost))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv(MongoDbHostEnvVar)))
 	if err != nil {
 		panic("Failed to connect to Mongo DB")
 	}
