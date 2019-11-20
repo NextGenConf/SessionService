@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/NextGenConf/SessionService/models"
+	"github.com/gorilla/mux"
 )
 
 type Environment struct {
@@ -20,8 +21,8 @@ func InitializeEnvironment() *Environment {
 
 func (e *Environment) GetSession(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)["UniqueName"]
-	sessions := e.db.GetSessions()
-	jsonData, err := json.Marshal(sessions)
+	session := e.db.GetSession(param)
+	jsonData, err := json.Marshal(session)
 	if err != nil {
 		log.Printf("Failed to serialize sessions: %s", err.Error())
 		http.Error(w, "Failed to serialize response", http.StatusInternalServerError)
