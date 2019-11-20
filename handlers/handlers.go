@@ -1,11 +1,45 @@
 package handlers
 
 import (
-	"fmt"
-	"github.com/gorilla/mux"
+	"encoding/json"
+	"log"
 	"net/http"
+
+	"github.com/NextGenConf/SessionService/models"
+	"github.com/gorilla/mux"
 )
 
-func GetSession(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I like %s!", mux.Vars(r)["key"])
+type Environment struct {
+	db models.SessionDatabaseHandler
+}
+
+func InitializeEnvironment() *Environment {
+	return &Environment{
+		db: models.InitializeDatabaseHandler(),
+	}
+}
+
+func (e *Environment) GetSession(w http.ResponseWriter, r *http.Request) {
+	param := mux.Vars(r)["UniqueName"]
+	session := e.db.GetSession(param)
+	jsonData, err := json.Marshal(session)
+	if err != nil {
+		log.Printf("Failed to serialize sessions: %s", err.Error())
+		http.Error(w, "Failed to serialize response", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonData)
+}
+
+func (e *Environment) GetAllSession(w http.ResponseWriter, r *http.Request) {
+	sessions := e.db.GetAllSessions()
+	jsonData, err := json.Marshal(sessions)
+	if err != nil {
+		log.Printf("Failed to serialize sessions: %s", err.Error())
+		http.Error(w, "Failed to serialize response", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonData)
 }
