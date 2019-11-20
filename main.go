@@ -1,13 +1,19 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/NextGenConf/SessionService/handlers"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/api/session/{key}", handlers.GetSession).Methods("GET")
+	env := handlers.InitializeEnvironment()
+	r.HandleFunc("/api/session/", env.GetAllSession).Methods("GET")
+	r.HandleFunc("/api/session/{UniqueName}", env.GetAllSession).Methods("GET")
+
+	log.Print("Running and listening on port 5000")
 	http.ListenAndServe(":5000", r)
 }
