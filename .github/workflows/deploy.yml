@@ -10,7 +10,7 @@ jobs:
     env:
       DOCKER_REGISTRY: nextgenconf.azurecr.io
       CI_CLIENT_ID: 35d182f8-3c82-4bf7-8531-b8f892cc60fa
-      IMAGE_NAME: "$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
+      IMAGE_NAME: ${{ echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]' }}
 
     runs-on: ubuntu-latest
 
