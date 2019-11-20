@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  build:
+    env:
+      DOCKER_REGISTRY: nextgenconf.azurecr.io
+      CI_CLIENT_ID: 35d182f8-3c82-4bf7-8531-b8f892cc60fa
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ${DOCKER_REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_SHA}
+    - name: Docker Login
+      run: echo ${{ secrets.CI_CLIENT_SECRET }} | docker login ${DOCKER_REGISTRY} --username ${CI_CLIENT_ID} --password-stdin
+    - name: Push the Docker image
+      run: docker push ${DOCKER_REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_SHA}
