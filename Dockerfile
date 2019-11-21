@@ -5,6 +5,7 @@ RUN cd /src && go build -o goapp
 
 # final stage
 FROM alpine:3.10.3
+RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=build-env /src/goapp /app/
 EXPOSE 5000
