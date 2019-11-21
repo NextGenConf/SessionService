@@ -20,28 +20,38 @@ type SessionDatabaseHandler interface {
 }
 
 const (
-	MongoDbHostEnvVar     = "MONGO_DB_HOST"
-	MongoDbUserEnvVar     = "MONGO_DB_USER"
-	MongoDbPasswordEnvVar = "MONGO_DB_PASSWORD"
-	MongoCollection       = "Sessions"
-	MongoDb               = "SessionsDb"
-	MongoDbDefaultHost    = "localhost:21017"
+	MongoDbPortEnvVar       = "MONGO_DB_PORT"
+	MongoDbUserEnvVar       = "MONGO_DB_USER"
+	MongoDbPasswordEnvVar   = "MONGO_DB_PASSWORD"
+	MongoDbParamatersEnvVar = "MONGO_DB_PARAMETERS"
+	MongoCollection         = "Sessions"
+	MongoDb                 = "SessionsDb"
+	MongoDbHost             = "mongo"
+	MongoDbDefaultPort      = "27017"
+	MongoProtocol           = "mongodb://"
 )
 
 func getHost() string {
-	host := os.Getenv(MongoDbHostEnvVar)
-	if host == "" {
-		host = MongoDbDefaultHost
+	// Get the port to use
+	port := os.Getenv(MongoDbPortEnvVar)
+	if port == "" {
+		port = MongoDbDefaultPort
 	}
 
 	// provide a username and password if they're set
 	mongoUser := os.Getenv(MongoDbUserEnvVar)
 	mongoPassword := os.Getenv(MongoDbPasswordEnvVar)
+	authString := ""
 	if mongoUser != "" && mongoPassword != "" {
-		host = fmt.Sprintf("%s:%s@%s", mongoUser, mongoPassword, host)
+		authString = fmt.Sprintf("%s:%s@", mongoUser, mongoPassword)
 	}
 
-	return fmt.Sprintf("mongodb://%s", host)
+	parameters := os.Getenv(MongoDbParamatersEnvVar)
+	if parameters != "" {
+		parameters += "/?" + parameters
+	}
+
+	return fmt.Sprintf("mongodb://%s%s:%s%s", authString, MongoDbHost, port, parameters)
 }
 
 /// Initializes the database to interact with the session database
