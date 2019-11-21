@@ -27,7 +27,7 @@ const (
 	MongoDbHostEnvVar       = "MONGO_DB_HOST"
 	MongoCollection         = "Sessions"
 	MongoDb                 = "SessionsDb"
-	MongoDbDefaultPort      = "27018"
+	MongoDbDefaultPort      = "27017"
 	MongoProtocol           = "mongodb://"
 )
 
