@@ -24,9 +24,9 @@ const (
 	MongoDbUserEnvVar       = "MONGO_DB_USER"
 	MongoDbPasswordEnvVar   = "MONGO_DB_PASSWORD"
 	MongoDbParamatersEnvVar = "MONGO_DB_PARAMETERS"
+	MongoDbHostEnvVar       = "MONGO_DB_HOST"
 	MongoCollection         = "Sessions"
 	MongoDb                 = "SessionsDb"
-	MongoDbHost             = "mongo"
 	MongoDbDefaultPort      = "27017"
 	MongoProtocol           = "mongodb://"
 )
@@ -51,9 +51,14 @@ func getHost() string {
 		parameters = "/?" + parameters
 	}
 
-	host := fmt.Sprintf("mongodb://%s%s:%s%s", authString, MongoDbHost, port, parameters)
-	log.Printf("Host: %s", host)
-	return host
+	host := os.Getenv(MongoDbHostEnvVar)
+	if host == "" {
+		host = "localhost"
+	}
+
+	connectionString := fmt.Sprintf("mongodb://%s%s:%s%s", authString, host, port, parameters)
+	log.Printf("Host: %s", connectionString)
+	return connectionString
 }
 
 /// Initializes the database to interact with the session database
