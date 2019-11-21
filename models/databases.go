@@ -48,7 +48,7 @@ func getHost() string {
 
 	parameters := os.Getenv(MongoDbParamatersEnvVar)
 	if parameters != "" {
-		parameters += "/?" + parameters
+		parameters = "/?" + parameters
 	}
 
 	host := fmt.Sprintf("mongodb://%s%s:%s%s", authString, MongoDbHost, port, parameters)
