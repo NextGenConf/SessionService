@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -19,16 +20,36 @@ type SessionDatabaseHandler interface {
 }
 
 const (
-	MongoDbHostEnvVar = "MONGO_DB_HOST"
-	MongoCollection   = "Sessions"
-	MongoDb           = "SessionsDb"
+	MongoDbHostEnvVar     = "MONGO_DB_HOST"
+	MongoDbUserEnvVar     = "MONGO_DB_USER"
+	MongoDbPasswordEnvVar = "MONGO_DB_PASSWORD"
+	MongoCollection       = "Sessions"
+	MongoDb               = "SessionsDb"
+	MongoDbDefaultHost    = "localhost:21017"
 )
+
+func getHost() string {
+	host := os.Getenv(MongoDbHostEnvVar)
+	if host == "" {
+		host = MongoDbDefaultHost
+	}
+
+	// provide a username and password if they're set
+	mongoUser := os.Getenv(MongoDbUserEnvVar)
+	mongoPassword := os.Getenv(MongoDbPasswordEnvVar)
+	if mongoUser != "" && mongoPassword != "" {
+		host = fmt.Sprintf("%s:%s@%s", mongoUser, mongoPassword, host)
+	}
+
+	return fmt.Sprintf("mongodb://%s", host)
+}
 
 /// Initializes the database to interact with the session database
 func InitializeDatabaseHandler() SessionDatabaseHandler {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv(MongoDbHostEnvVar)))
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(getHost()))
 	if err != nil {
 		panic("Failed to connect to Mongo DB")
 	}
