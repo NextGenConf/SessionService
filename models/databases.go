@@ -110,7 +110,7 @@ func (mongo *MongoDbHandler) GetAllSessions() ([]Session, error) {
 func (mongo *MongoDbHandler) GetSession(uniqueName string) (Session, error) {
 	var filter = bson.M{"UniqueName": uniqueName}
 	var session Session
-	err := mongo.Collection.FindOne(context.Background(), filter).Decode(session)
+	err := mongo.Collection.FindOne(context.Background(), filter).Decode(&session)
 	if err != nil {
 		log.Printf("Failed to read session from db: %s", err.Error())
 	}
