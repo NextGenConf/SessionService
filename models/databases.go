@@ -26,7 +26,7 @@ const (
 	MongoDbParamatersEnvVar = "MONGO_DB_PARAMETERS"
 	MongoCollection         = "Sessions"
 	MongoDb                 = "SessionsDb"
-	MongoDbHost             = "localhost"
+	MongoDbHost             = "mongo"
 	MongoDbDefaultPort      = "27017"
 	MongoProtocol           = "mongodb://"
 )
