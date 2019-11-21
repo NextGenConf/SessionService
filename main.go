@@ -16,5 +16,5 @@ func main() {
 	r.HandleFunc("/api/session/", env.AddNewSession).Methods("POST")
 
 	log.Print("Running and listening on port 5000")
-	http.ListenAndServe(":5000", r)
+	log.Fatal(http.ListenAndServe(":5000", r))
 }
