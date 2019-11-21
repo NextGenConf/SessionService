@@ -7,5 +7,5 @@ RUN cd /src && go build -o goapp
 FROM alpine:3.10.3
 WORKDIR /app
 COPY --from=build-env /src/goapp /app/
-EXPOSE 80
+EXPOSE 5000
 ENTRYPOINT ./goapp
