@@ -108,7 +108,7 @@ func (mongo *MongoDbHandler) GetAllSessions() ([]Session, error) {
 
 /// Retrieve a session by the specific name
 func (mongo *MongoDbHandler) GetSession(uniqueName string) (Session, error) {
-	var filter = bson.M{"UniqueName": uniqueName}
+	var filter = bson.M{"_id": uniqueName}
 	var session Session
 	err := mongo.Collection.FindOne(context.Background(), filter).Decode(&session)
 	if err != nil {
