@@ -1,7 +1,7 @@
 package models
 
 type Session struct {
-	UniqueName   string `json:"id" bson:"_id"`
+	UniqueName   string `json:"uniqueName" bson:"_id"`
 	Title        string `json:"title" bson:"title"` 
 	Subtitle     string `json:"subtitle" bson:"subtitle"`
 	Description  string `json:"description" bson:"description"`
