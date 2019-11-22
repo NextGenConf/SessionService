@@ -1,11 +1,11 @@
 package models
 
 type Session struct {
-	UniqueName   string `bson:"_id"`
-	Title        string
-	Subtitle     string
-	Description  string
-	PresenterId  string
-	SlideDeckUrl string
-	Location     string
+	UniqueName   string `json:"id" bson:"_id"`
+	Title        string `json:"title" bson:"title"` 
+	Subtitle     string `json:"subtitle" bson:"title"`
+	Description  string `json:"description" bson:"description"`
+	PresenterId  string `json:"presenterId" bson:"presenterId"`
+	SlideDeckUrl string `json:"slideDeckUrl" bson:"slideDeckUrl"`
+	Location     string `json:"location" bson:"location"`
 }
