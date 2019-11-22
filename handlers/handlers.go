@@ -34,7 +34,7 @@ func (e *Environment) GetSession(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to serialize response", http.StatusInternalServerError)
 		return
 	}
-
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
 }
 
@@ -51,6 +51,7 @@ func (e *Environment) GetAllSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
 }
 
