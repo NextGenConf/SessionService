@@ -3,7 +3,7 @@ RUN apk --no-cache add build-base git
 ADD . /src
 RUN cd /src && go build -o goapp
 
-# final stage.
+# final stage
 FROM alpine:3.10.3
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
