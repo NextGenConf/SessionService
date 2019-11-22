@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-/// Interface to interact with a session database
+/// Interface to interact with a session database.
 type SessionDatabaseHandler interface {
 	GetAllSessions() ([]Session, error)
 	GetSession(string) (Session, error)
