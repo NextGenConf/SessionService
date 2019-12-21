@@ -1,0 +1,17 @@
+{
+    "uniqueName": "my-session",
+    "title": "My Session",
+    "subtitle": "I'm gonna talk about stuff",
+    "description": "There  is some stuff that I'm going to talk about",
+    "presenterId": "me123",
+    "slideDeckUrl": "https://stuff"
+}
+
+{
+    "uniqueName": "my-session-2",
+    "title": "My Session 2",
+    "subtitle": "I'm gonna talk about more stuff",
+    "description": "There is more stuff that I'm going to talk about",
+    "presenterId": "me123",
+    "slideDeckUrl": "https://more-stuff"
+}
