@@ -37,12 +37,14 @@ run these commands:
 
 ```sh
 MONGO_CLIENT_CONTAINER="mongo-client"
+MONGO_DATABASE="SessionsDb"
+MONGO_COLLECTION="Sessions"
 
 docker run --rm --network $DOCKER_NETWORK --name $MONGO_CLIENT_CONTAINER -v `pwd`/testdata:/testdata mongo \
     mongoimport \
     --host $MONGO_SERVER_CONTAINER \
-    --db sessions \
-    --collection sessions \
+    --db $MONGO_DATABASE \
+    --collection $MONGO_COLLECTION \
     --drop \
     --file /testdata/sessions.json
 ```
