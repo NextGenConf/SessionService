@@ -8,5 +8,13 @@ FROM alpine:3.10.3
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=build-env /src/goapp /app/
+
 EXPOSE 5000
+
+ENV MONGO_DB_HOST=
+ENV MONGO_DB_PORT=
+ENV MONGO_DB_USER=
+ENV MONGO_DB_PASSWORD=
+ENV MONGO_DB_PARAMETERS=
+
 ENTRYPOINT ./goapp
